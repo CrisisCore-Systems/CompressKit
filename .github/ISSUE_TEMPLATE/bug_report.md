@@ -1,13 +1,13 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a report to help improve CompressKit
 title: '[BUG] '
 labels: bug
 assignees: ''
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+A clear description of the bug.
 
 **To Reproduce**
 Steps to reproduce the behavior:
@@ -16,7 +16,7 @@ Steps to reproduce the behavior:
 3. See error
 
 **Expected behavior**
-A clear and concise description of what you expected to happen.
+What you expected to happen.
 
 **Environment:**
  - Termux version:
@@ -24,4 +24,4 @@ A clear and concise description of what you expected to happen.
  - CompressKit version:
 
 **Additional context**
-Add any other context about the problem here.
+Add any other relevant information.
