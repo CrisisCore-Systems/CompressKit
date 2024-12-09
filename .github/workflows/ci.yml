@@ -15,13 +15,20 @@ jobs:
     - name: Setup environment
       run: |
         sudo apt-get update
-        sudo apt-get install -y shellcheck
+        sudo apt-get install -y shellcheck ghostscript
     
     - name: Run ShellCheck
       run: |
         shellcheck compresskit-pdf
-        
-    - name: Test installation
+        shellcheck install.sh
+    
+    - name: Test script permissions
       run: |
         chmod +x compresskit-pdf
+        chmod +x install.sh
         ./compresskit-pdf --version
+    
+    - name: Test installation
+      run: |
+        sudo ./install.sh
+        compresskit-pdf --help
