@@ -1,0 +1,22 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Editor Files
+.vscode/
+.idea/
+*.swp
+*~
+
+# Test Files
+*.pdf
+test/*.pdf
+*.log
+
+# Build Output
+dist/
+build/
+
+# Dependencies
+node_modules/
+vendor/
