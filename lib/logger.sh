@@ -4,7 +4,7 @@
 # Handles all logging and debugging output
 
 # Initialize logging
-LOG_FILE="${SCRIPT_DIR}/logs/compresskit.log"
+LOG_FILE="${SCRIPT_DIR}./logs/compresskit.log"
 DEBUG_MODE=${DEBUG_MODE:-0}
 
 # Create logs directory if it doesn't exist

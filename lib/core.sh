@@ -4,10 +4,10 @@
 # Coordinates between UI, logging, configuration, and compression modules
 
 # Load all required modules
-source "${SCRIPT_DIR}/lib/ui.sh"
-source "${SCRIPT_DIR}/lib/logger.sh"
-source "${SCRIPT_DIR}/lib/config.sh"
-source "${SCRIPT_DIR}/lib/compress.sh"
+source "./lib/ui.sh"
+source "./lib/logger.sh"
+source "./lib/config.sh"
+source "./lib/compress.sh"
 
 # Initialize the system
 init_system() {

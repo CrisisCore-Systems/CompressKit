@@ -12,12 +12,12 @@ init_tests
 # Configuration tests
 describe "Configuration Module"
 
-it "should create default configuration" test_default_config() {
+it "should create default configuration" && {
     create_default_config
     assert_file_exists "$CONFIG_FILE"
 }
 
-it "should load configuration correctly" test_load_config() {
+it "should load configuration correctly" && {
     local test_value=$(get_config "quality")
     assert_equals "medium" "$test_value"
 }
@@ -25,7 +25,7 @@ it "should load configuration correctly" test_load_config() {
 # Compression tests
 describe "Compression Module"
 
-it "should compress PDF files" test_compression() {
+it "should compress PDF files" && {
     local input_file="tests/samples/test.pdf"
     local output_file="tests/output/compressed.pdf"
     
@@ -41,7 +41,7 @@ it "should compress PDF files" test_compression() {
 # UI tests
 describe "UI Module"
 
-it "should show progress bar" test_progress_bar() {
+it "should show progress bar" && {
     local result=$(progress_bar 50 100)
     assert_success "[ -n '$result' ]"
 }
@@ -49,7 +49,7 @@ it "should show progress bar" test_progress_bar() {
 # Error handling tests
 describe "Error Handler"
 
-it "should handle file not found error" test_file_not_found() {
+it "should handle file not found error" && {
     local result=$(handle_error ${ERROR_CODES["FILE_NOT_FOUND"]} "test_function" "0")
     assert_equals "${ERROR_MESSAGES["FILE_NOT_FOUND"]}" "$(echo "$result" | grep -o "File or directory not found")"
 }
