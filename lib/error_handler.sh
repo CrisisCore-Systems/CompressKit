@@ -31,6 +31,10 @@ declare -A ERROR_MESSAGES=(
 # Stack trace array
 declare -a ERROR_STACK
 
+# Centralized configuration
+CONFIG_FILE="/path/to/config.sh"
+source "$CONFIG_FILE"
+
 # Initialize error handling
 init_error_handler() {
     set -o errexit
@@ -62,7 +66,7 @@ handle_error() {
     
     # Build stack trace
     for ((i=0; i<${#func_stack[@]}; i++)); do
-        stack_trace+="\n  at ${func_stack[i]} (line ${BASH_LINENO[i]})"
+        stack_trace+="\n  at ${func_stack[i]} (script ${BASH_SOURCE[i]}, line ${BASH_LINENO[i]})"
     done
     
     # Log error
@@ -87,19 +91,37 @@ recover_from_error() {
     
     case "$error_type" in
         "DISK_FULL")
-            # Attempt to clean temporary files
             clean_temp_files
             ;;
         "CONFIG_ERROR")
-            # Attempt to restore default configuration
             log_warn "Attempting to restore default configuration..."
             create_default_config
             ;;
         "COMPRESSION_FAILED")
-            # Attempt to restore original file if backup exists
             restore_backup
             ;;
+        *)
+            log_error "Unhandled error type: $error_type. Escalating..."
+            notify_admin "$error_type"
+            ;;
     esac
+}
+
+# Validate dependencies
+validate_dependencies() {
+    local dependencies=("bash" "mail" "rm" "cp")
+    for cmd in "${dependencies[@]}"; do
+        if ! command -v "$cmd" &> /dev/null; then
+            log_error "Missing dependency: $cmd"
+            exit "${ERROR_CODES["DEPENDENCY_MISSING"]}"
+        fi
+    done
+}
+
+# Notify admin of critical errors
+notify_admin() {
+    local error_type="$1"
+    echo "Critical error detected: $error_type" | mail -s "CompressKit Error Notification" admin@example.com
 }
 
 # Clean temporary files
@@ -121,4 +143,37 @@ restore_backup() {
         log_info "Restoring backup..."
         cp "$backup_dir/${current_file}.backup" "$current_file"
     fi
+}
+
+# Display user-friendly error messages
+ui_error() {
+    echo "ERROR: $1. Please check the logs for more details."
+}
+
+# Logging functions
+log_error() {
+    echo "[ERROR] $(date '+%Y-%m-%d %H:%M:%S') $1" >> /path/to/logfile.log
+}
+
+log_debug() {
+    echo "[DEBUG] $(date '+%Y-%m-%d %H:%M:%S') $1" >> /path/to/logfile.log
+}
+
+log_warn() {
+    echo "[WARN] $(date '+%Y-%m-%d %H:%M:%S') $1" >> /path/to/logfile.log
+}
+
+log_info() {
+    echo "[INFO] $(date '+%Y-%m-%d %H:%M:%S') $1" >> /path/to/logfile.log
+}
+
+# Test error handling (optional for development)
+test_error_handling() {
+    init_error_handler
+    
+    # Simulate errors
+    handle_error "${ERROR_CODES["INVALID_INPUT"]}" "test_func"
+    handle_error "${ERROR_CODES["DISK_FULL"]}" "test_func"
+    
+    echo "Error handling tests completed."
 }
