@@ -3,32 +3,38 @@
 # Core functionality integration layer for CompressKit
 # Coordinates between UI, logging, configuration, and compression modules
 
-# Load all required modules
-source "./lib/ui.sh"
-source "./lib/logger.sh"
-source "./lib/config.sh"
-source "./lib/compress.sh"
+# The roots of CompressKit—where every node in the system grows.
 
-# Initialize the system
+# Load all required modules (the branches of the tree)
+for module in "./lib/ui.sh" "./lib/logger.sh" "./lib/config.sh" "./lib/compress.sh"; do
+    if [ -f "$module" ]; then
+        source "$module"
+    else
+        echo "Missing essential module: $module"
+        exit 1
+    fi
+done
+
+# The "roots" of CompressKit—initializing the sacred system.
 init_system() {
-    log_debug "Initializing CompressKit..."
+    log_debug "Breathing life into CompressKit..."
     
-    # Show startup animation
+    # Show startup animation (the awakening)
     matrix_rain 1
     
-    # Initialize configuration
+    # Initialize configuration (the soil of our tree)
     init_config
     
-    # Validate system requirements
+    # Validate system requirements (the Gatekeeper checks the path forward)
     check_requirements
     
-    # Initialize UI
+    # Initialize UI (the canopy where users interact)
     init_ui
     
     log_info "System initialized successfully"
 }
 
-# Check system requirements
+# Invoke the mythical guardian to check system requirements
 check_requirements() {
     local requirements=(
         "gs:Ghostscript is required for PDF compression"
@@ -42,7 +48,7 @@ check_requirements() {
         local msg="${req#*:}"
         
         if ! command -v "$cmd" >/dev/null 2>&1; then
-            log_error "$msg"
+            log_error "$msg (The Gatekeeper denies entry: '$cmd')"
             all_met=false
         fi
     done
@@ -50,45 +56,47 @@ check_requirements() {
     $all_met || exit 1
 }
 
-# Main workflow handler
+# Recursive workflow handler—each branch leads deeper into the tree
 handle_workflow() {
     local command="$1"
     shift
     
+    # Base case
+    if [ -z "$command" ]; then
+        show_help
+        return
+    fi
+
+    # Recursive call
     case "$command" in
-        "compress")
-            handle_compression "$@"
-            ;;
-        "info")
-            handle_pdf_info "$@"
-            ;;
-        "config")
-            handle_configuration "$@"
+        "compress"|"info"|"config")
+            handle_$command "$@"
             ;;
         *)
+            log_error "Unknown command: $command"
             show_help
             ;;
     esac
 }
 
-# Compression workflow
+# ⚙️ The forge of CompressKit - where PDFs are reforged into lighter artifacts
 handle_compression() {
     local input_file="$1"
     local quality=$(get_config "quality")
     local output_dir=$(get_config "output_dir")
     
-    # Validate input
+    # Validate input (checking the artifact's integrity)
     if [ ! -f "$input_file" ]; then
-        log_error "Input file not found: $input_file"
+        log_error "The artifact was not found: $input_file"
         return 1
     fi
     
-    # Show progress
+    # Show progress (the blacksmith begins their work)
     ui_info "Starting compression workflow..."
     compress_pdf "$input_file" "$quality" "$output_dir" &
-    spinner $! "Compressing PDF..."
+    spinner $! "Invoking the compression daemon..."
     
-    # Verify results
+    # Verify results (the artifact's rebirth)
     if [ $? -eq 0 ]; then
         ui_success "Compression completed successfully"
     else
@@ -96,7 +104,7 @@ handle_compression() {
     fi
 }
 
-# Main entry point
+# Main entry point (the trunk of the tree—where all branches converge)
 main() {
     init_system
     handle_workflow "$@"
