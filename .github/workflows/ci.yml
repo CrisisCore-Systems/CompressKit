@@ -17,10 +17,15 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y shellcheck ghostscript
     
-    - name: Run ShellCheck
+    - name: Run ShellCheck on all shell scripts
       run: |
-        shellcheck compresskit-pdf
-        shellcheck install.sh
+        find . -type f -name "*.sh" -exec shellcheck -x {} \; || true
+        
+    - name: Run ShellCheck on main scripts (strict mode)
+      run: |
+        shellcheck -x compresskit-pdf
+        shellcheck -x install.sh
+        shellcheck -x run_tests.sh
     
     - name: Test script permissions
       run: |

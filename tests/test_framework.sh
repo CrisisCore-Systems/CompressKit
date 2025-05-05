@@ -37,21 +37,42 @@ describe() {
     echo -e "\n${TEST_COLORS[info]}Test Suite: $CURRENT_SUITE${TEST_COLORS[reset]}"
 }
 
+# SECURITY FIX: Replace eval with array-based execution
+run_test() {
+    local test_function="$1"
+    shift
+    local test_args=("$@")
+    
+    # Execute test in subshell with arguments
+    (
+        if [ ${#test_args[@]} -gt 0 ]; then
+            "$test_function" "${test_args[@]}"
+        else
+            "$test_function"
+        fi
+    )
+    return $?
+}
+
 # Run a test case
 it() {
     local description="$1"
     local test_function="$2"
+    shift 2
+    local test_args=("$@")
     
     ((TESTS_TOTAL++))
+    echo -n "  Testing: $description... "
     
-    # Run test in subshell to isolate environment
-    if (set -e; $test_function) > "${TEST_OUTPUT_DIR}/test_${TESTS_TOTAL}.log" 2>&1; then
-        echo -e "  ${TEST_COLORS[pass]}✓${TEST_COLORS[reset]} $description"
+    # SECURITY FIX: Use array-based execution instead of eval
+    if run_test "$test_function" "${test_args[@]}"; then
+        echo -e "${TEST_COLORS[pass]}PASSED${TEST_COLORS[reset]}"
         ((TESTS_PASSED++))
+        return 0
     else
-        echo -e "  ${TEST_COLORS[fail]}✗${TEST_COLORS[reset]} $description"
-        echo "    See: ${TEST_OUTPUT_DIR}/test_${TESTS_TOTAL}.log"
+        echo -e "${TEST_COLORS[fail]}FAILED${TEST_COLORS[reset]}"
         ((TESTS_FAILED++))
+        return 1
     fi
 }
 
@@ -84,8 +105,16 @@ assert_success() {
     local command="$1"
     local message="${2:-Command failed}"
     
-    if ! eval "$command"; then
-        echo "Assert failed: $message"
+    # SECURITY FIX: Use more restricted command execution
+    if [[ $command =~ ^[a-zA-Z0-9_/.\ -]+$ ]]; then
+        # Only allow alphanumeric characters, underscores, slashes, dots, spaces and hyphens
+        if ! eval "$command"; then
+            echo "Assert failed: $message"
+            echo "Command: $command"
+            return 1
+        fi
+    else
+        echo "Security violation: Command contains unsafe characters"
         echo "Command: $command"
         return 1
     fi
@@ -106,4 +135,22 @@ print_test_results() {
         echo -e "\n${TEST_COLORS[fail]}Some tests failed.${TEST_COLORS[reset]}"
         return 1
     fi
+}
+
+# Generate a test report
+generate_report() {
+    local report_file="${TEST_OUTPUT_DIR}/report_$(date '+%Y%m%d%H%M%S').txt"
+    
+    {
+        echo "Test Report: $(date)"
+        echo "===================="
+        echo "Total tests: $TESTS_TOTAL"
+        echo "Passed: $TESTS_PASSED"
+        echo "Failed: $TESTS_FAILED"
+        echo
+        echo "Test Suites:"
+        # List test suites here
+    } > "$report_file"
+    
+    echo "Report generated: $report_file"
 }

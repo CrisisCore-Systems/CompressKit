@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 
 # Load configurations from branding.conf
 source "$(dirname "$0")/branding.conf"

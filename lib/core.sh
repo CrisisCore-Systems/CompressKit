@@ -53,7 +53,73 @@ check_requirements() {
         fi
     done
     
+    # Enhanced dependency checking with versions
+    local dependencies=(
+        "gs:4.0:Ghostscript is required for PDF compression"
+        "openssl:1.1.0:OpenSSL is required for license verification"
+        "bash:4.0:Bash 4.0+ is required"
+    )
+    
+    for dep in "${dependencies[@]}"; do
+        IFS=':' read -r cmd min_ver msg <<< "$dep"
+        
+        # Check if command exists
+        if ! command -v "$cmd" &>/dev/null; then
+            log_error "$msg (command not found: '$cmd')"
+            all_met=false
+            continue
+        fi
+        
+        # Check version if specified
+        if [ -n "$min_ver" ]; then
+            local ver
+            case "$cmd" in
+                gs)
+                    ver=$(gs --version 2>/dev/null | head -n 1)
+                    ;;
+                openssl)
+                    ver=$(openssl version | cut -d' ' -f2)
+                    ;;
+                bash)
+                    ver=${BASH_VERSION%.*}
+                    ;;
+            esac
+            
+            # Simple version comparison
+            if ! meets_minimum_version "$ver" "$min_ver"; then
+                log_error "$msg (found version $ver, need $min_ver+)"
+                all_met=false
+            fi
+        fi
+    done
+    
     $all_met || exit 1
+}
+
+# Helper function to check version requirements
+meets_minimum_version() {
+    local current="$1"
+    local required="$2"
+    
+    # Convert versions to comparable integers
+    local current_parts=( ${current//./ } )
+    local required_parts=( ${required//./ } )
+    
+    # Compare major version
+    if [[ ${current_parts[0]} -lt ${required_parts[0]} ]]; then
+        return 1
+    elif [[ ${current_parts[0]} -gt ${required_parts[0]} ]]; then
+        return 0
+    fi
+    
+    # Compare minor version if major is equal
+    if [[ ${#current_parts[@]} -gt 1 && ${#required_parts[@]} -gt 1 ]]; then
+        if [[ ${current_parts[1]} -lt ${required_parts[1]} ]]; then
+            return 1
+        fi
+    fi
+    
+    return 0
 }
 
 # Recursive workflow handler—each branch leads deeper into the tree

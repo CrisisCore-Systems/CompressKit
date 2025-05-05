@@ -142,4 +142,4 @@ main() {
 }
 
 # Run tests
-main "$@"w
+main "$@"
