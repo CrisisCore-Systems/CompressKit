@@ -218,6 +218,9 @@ Check out our technical blog posts about CompressKit:
 - [Introduction to CompressKit: Features and Architecture](blog/01-introduction-to-compresskit.md)
 - [Implementing Security in Shell Scripts: Lessons from CompressKit](blog/02-security-in-shell-scripts.md)
 - [Building a Modular CLI Application with Bash](blog/03-building-modular-cli-apps.md)
+- [Error Handling and Recovery Patterns in Bash](blog/04-error-handling-patterns.md)
+- [Building Rich Terminal UIs with Bash](blog/05-terminal-ui-design.md)
+- [Testing Strategies for Shell Scripts](blog/06-testing-strategies.md)
 
 See the [blog directory](blog/README.md) for all articles and more information.
 

@@ -75,6 +75,79 @@ An exploration of software architecture principles applied to shell scripts. Cov
 
 ---
 
+### 4. [Error Handling and Recovery Patterns in Bash: Building Resilient Shell Scripts](04-error-handling-patterns.md)
+
+**Topics:** Error Handling, Reliability, Recovery Patterns, Best Practices
+
+Comprehensive guide to error handling in shell scripts. Covers:
+- Semantic error code systems
+- Error context tracking and stack management
+- Centralized error handlers
+- Recovery mechanisms (retry with backoff, fallback strategies)
+- Cleanup and resource management with traps
+- Graceful degradation
+- User-friendly error messages with actionable suggestions
+
+**Target Audience:** All developers writing shell scripts, DevOps engineers
+
+**Key Takeaways:**
+- Semantic error codes enable specific error handling
+- Context tracking helps debug complex call stacks
+- Automatic retry and fallback make scripts more resilient
+- Cleanup handlers prevent resource leaks
+- Good error messages guide users to solutions
+
+---
+
+### 5. [Building Rich Terminal UIs with Bash: From Plain Text to Visual Experiences](05-terminal-ui-design.md)
+
+**Topics:** Terminal UI, User Experience, CLI Design, TUI
+
+How to create sophisticated terminal interfaces with Bash. Covers:
+- Color systems (ANSI and 24-bit RGB)
+- Status indicators and spinner animations
+- Progress bars and real-time dashboards
+- Interactive menus with arrow-key navigation
+- Responsive layouts and box drawing
+- Terminal animations (matrix rain, fade effects)
+- Feature detection and graceful degradation
+
+**Target Audience:** Developers building CLI tools, UX designers, tool creators
+
+**Key Takeaways:**
+- Terminal UIs can be rich and engaging without sacrificing portability
+- Always detect capabilities before using advanced features
+- Use colors semantically to aid comprehension
+- Optimize performance by minimizing terminal updates
+- Provide plain-text fallbacks for automation
+
+---
+
+### 6. [Testing Strategies for Shell Scripts: From Unit Tests to Integration Testing](06-testing-strategies.md)
+
+**Topics:** Testing, Quality Assurance, TDD, Test Automation
+
+Complete testing approach for shell scripts. Covers:
+- Custom test framework implementation
+- Assertion functions for common patterns
+- Unit testing pure functions and functions with side effects
+- Security testing with attack vectors
+- Integration testing complete workflows
+- Edge case and error condition testing
+- Mocking external commands and stubbing functions
+- Performance testing and CI/CD integration
+
+**Target Audience:** Developers, QA engineers, DevOps practitioners
+
+**Key Takeaways:**
+- Shell scripts need comprehensive testing like any other code
+- Test at multiple levels: unit, integration, and system
+- Security-critical functions deserve extra scrutiny
+- Mock external dependencies for reliable tests
+- Automate tests in CI/CD pipelines
+
+---
+
 ## About These Posts
 
 These blog posts are based on the actual implementation of CompressKit, an open-source PDF compression toolkit. All code examples are production-ready and battle-tested. The patterns and practices described can be applied to any shell script project, regardless of size or complexity.
@@ -93,7 +166,10 @@ We recommend reading the posts in order:
 
 1. **Start with the Introduction** to understand what CompressKit is and why it matters
 2. **Move to Security** to learn defensive programming in shell scripts
-3. **Finish with Architecture** to understand how to structure complex scripts
+3. **Study Architecture** to understand how to structure complex scripts
+4. **Learn Error Handling** to build resilient applications
+5. **Explore Terminal UI** to create engaging user experiences
+6. **Master Testing** to ensure quality and catch regressions
 
 However, each post stands alone and can be read independently based on your interests.
 
