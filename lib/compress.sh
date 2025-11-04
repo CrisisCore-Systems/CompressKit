@@ -272,10 +272,10 @@ main() {
     elif [ -d "$safe_input" ]; then
         compress_directory "$safe_input" "$quality" "$safe_output_dir"
         return $?
-    else {
+    else
         log_error "Unsupported input type."
         return ${ERROR_CODES["INVALID_INPUT"]}
-    }
+    fi
 }
 
 # Only execute main when script is run directly (not sourced)

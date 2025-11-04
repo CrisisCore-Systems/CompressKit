@@ -204,7 +204,7 @@ secure_tempfile() {
     if [ ! -d "$tempdir" ] || [ ! -w "$tempdir" ]; then
         echo "Error: Temp directory not available or not writable: $tempdir" >&2
         return 1
-    }
+    fi
     
     # Create a unique filename with mktemp (more secure than self-made solutions)
     local tempfile
