@@ -36,10 +36,10 @@ init_license_system() {
     # Instead, load it from a verified source
     if [ ! -f "$PUBLIC_KEY_FILE" ]; then
         # Load key from secure location or download from authenticated source
-        fetch_public_key || {
+        if ! fetch_public_key; then
             echo "Error: Could not retrieve license verification key" >&2
             return 1
-        }
+        fi
     fi
     
     return 0
@@ -67,19 +67,19 @@ verify_license_signature() {
     if ! command -v openssl &>/dev/null; then
         echo "Error: OpenSSL not available for signature verification" >&2
         return $LICENSE_INVALID_SIGNATURE
-    }
+    fi
     
     if [ ! -f "$LICENSE_FILE" ] || [ ! -f "$LICENSE_SIG_FILE" ]; then
         echo "Error: License or signature file missing" >&2
         return $LICENSE_MISSING
-    }
+    fi
     
     # Verify signature
     if ! openssl dgst -sha256 -verify "$PUBLIC_KEY_FILE" \
                       -signature "$LICENSE_SIG_FILE" "$LICENSE_FILE" &>/dev/null; then
         echo "Error: Invalid license signature" >&2
         return $LICENSE_INVALID_SIGNATURE
-    }
+    fi
     
     return $LICENSE_VALID
 }
@@ -95,7 +95,7 @@ check_license_expiration() {
     if [ -z "$expiration_date" ]; then
         echo "Error: No expiration date found in license" >&2
         return $LICENSE_INVALID_FORMAT
-    }
+    fi
     
     # Convert dates to seconds since epoch for comparison
     local exp_seconds
@@ -116,14 +116,14 @@ check_license_expiration() {
     if [ -z "$exp_seconds" ]; then
         echo "Error: Could not parse expiration date: $expiration_date" >&2
         return $LICENSE_INVALID_FORMAT
-    }
+    fi
     
     # Check if license has expired
     if [ "$current_seconds" -gt "$exp_seconds" ]; then
         local current_date=$(date "+%Y-%m-%d")
         echo "Error: License expired on $expiration_date (current date: $current_date)" >&2
         return $LICENSE_EXPIRED
-    }
+    fi
     
     return $LICENSE_VALID
 }
@@ -137,7 +137,7 @@ validate_license() {
     if [ ! -f "$LICENSE_FILE" ]; then
         echo "Error: License file not found" >&2
         return $LICENSE_MISSING
-    }
+    fi
     
     # Read license content
     local license_content
@@ -146,21 +146,21 @@ validate_license() {
     if [ $? -ne 0 ] || [ -z "$license_content" ]; then
         echo "Error: Failed to read license file or file is empty" >&2
         return $LICENSE_CORRUPT
-    }
+    fi
     
     # Verify license signature
     verify_license_signature
     local sig_status=$?
     if [ $sig_status -ne $LICENSE_VALID ]; then
         return $sig_status
-    }
+    fi
     
     # Check license expiration
     check_license_expiration "$license_content"
     local exp_status=$?
     if [ $exp_status -ne $LICENSE_VALID ]; then
         return $exp_status
-    }
+    fi
     
     # Extract and validate license type
     local license_type
@@ -195,7 +195,7 @@ is_feature_licensed() {
     
     if [ $license_status -ne $LICENSE_VALID ]; then
         return 1
-    }
+    fi
     
     # Read license content
     local license_content
