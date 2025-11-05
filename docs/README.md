@@ -187,6 +187,7 @@ Compare CompressKit with other PDF compression tools:
 
 - **[Architecture Guide](ARCHITECTURE.md)** - Detailed system architecture
 - **[Security Guide](SECURITY_GUIDE.md)** - Security implementation and best practices
+- **[Technology Stack](TECHNOLOGY_STACK.md)** - Comprehensive technology stack recommendations and architecture decisions
 - **[Project Timeline](PROJECT_TIMELINE.md)** - Comprehensive project timeline and milestone planning
 - **[Main README](../README.md)** - Project overview and quick start
 
@@ -255,5 +256,6 @@ For more information:
 - [CLI Tools Comparison](CLI_TOOLS_COMPARISON.md)
 - [Security Guide](SECURITY_GUIDE.md)
 - [Architecture Documentation](ARCHITECTURE.md)
+- [Technology Stack](TECHNOLOGY_STACK.md)
 - [Project Timeline](PROJECT_TIMELINE.md)
 - [Main README](../README.md)
