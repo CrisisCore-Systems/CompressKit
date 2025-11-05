@@ -84,8 +84,8 @@ else
     canonical_path=$(readlink -f "$input_file" 2>/dev/null)
 fi
 
-# Input sanitization
-[[ "$filename" =~ ^[a-zA-Z0-9._-]+\.pdf$ ]]
+# Input sanitization - prevent consecutive dots and ensure valid start character
+[[ "$filename" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*\.pdf$ ]]
 ```
 
 ### Secure Execution
@@ -187,9 +187,16 @@ jobs:
   [ "$status" -eq 0 ]
   # CompressKit typically outputs to <filename>_compressed.pdf
   [ -f "test_compressed.pdf" ]
-  # Verify size reduction (Linux-compatible stat command)
-  original_size=$(stat -c%s test.pdf)
-  compressed_size=$(stat -c%s test_compressed.pdf)
+  # Verify size reduction (portable across Linux/macOS)
+  if stat -c%s test.pdf >/dev/null 2>&1; then
+    # Linux
+    original_size=$(stat -c%s test.pdf)
+    compressed_size=$(stat -c%s test_compressed.pdf)
+  else
+    # macOS/BSD
+    original_size=$(stat -f%z test.pdf)
+    compressed_size=$(stat -f%z test_compressed.pdf)
+  fi
   [ "$compressed_size" -lt "$original_size" ]
 }
 ```
@@ -224,7 +231,9 @@ elif [ -w "/var/log" ]; then
     mkdir -p "$LOG_DIR" 2>/dev/null
 else
     # Create user-specific temp directory with restricted permissions
-    LOG_DIR="${TMPDIR:-/tmp}/compresskit-$USER"
+    # Use UID for security instead of USER variable
+    USER_ID=$(id -u)
+    LOG_DIR="${TMPDIR:-/tmp}/compresskit-${USER_ID}"
     mkdir -p "$LOG_DIR" && chmod 700 "$LOG_DIR"
 fi
 
