@@ -158,12 +158,13 @@ jobs:
 - **Releases**: Automated packaging and distribution
 
 ### License Server (Premium)
-**DigitalOcean Droplet ($10/month)**
+**DigitalOcean Droplet (~$10-12/month)**
 - **Specs**: 1 vCPU, 1GB RAM, 25GB SSD
 - **OS**: Ubuntu 22.04 LTS
 - **Security**: UFW firewall, fail2ban, automatic updates
+- **Note**: Pricing subject to change; verify current rates with cloud providers
 
-**Alternative**: AWS EC2 t3.micro (free tier eligible)
+**Alternative**: AWS EC2 t3.micro (free tier eligible for first year)
 
 ### CDN & Distribution
 **GitHub Releases** (Free)
@@ -208,7 +209,10 @@ jobs:
 **Custom Logging Framework**
 ```bash
 # Define log file location (typically set in initialization)
-LOG_FILE="${HOME}/.config/compresskit/compresskit.log"
+# Falls back to /tmp if HOME or .config directory is unavailable
+LOG_DIR="${HOME:-/tmp}/.config/compresskit"
+mkdir -p "$LOG_DIR" 2>/dev/null || LOG_DIR="/tmp"
+LOG_FILE="${LOG_DIR}/compresskit.log"
 
 log_info() {
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] INFO: $1" >> "$LOG_FILE"
@@ -235,10 +239,12 @@ log_info() {
 - **Total**: ~$32,500
 
 ### Operational Costs (Monthly)
-- **License Server**: $10 (DigitalOcean Droplet)
+- **License Server**: ~$10-12 (DigitalOcean Droplet or similar)
 - **Domain & SSL**: $2
 - **Monitoring Tools**: $0 (self-hosted)
-- **Total**: ~$12/month
+- **Total**: ~$12-14/month
+
+**Note**: Cloud provider pricing varies; verify current rates for accurate budgeting.
 
 ### Scaling Considerations
 
