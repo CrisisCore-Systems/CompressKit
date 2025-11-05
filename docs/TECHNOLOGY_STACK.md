@@ -84,8 +84,10 @@ else
     canonical_path=$(readlink -f "$input_file" 2>/dev/null)
 fi
 
-# Input sanitization - prevent consecutive dots and ensure valid start character
-[[ "$filename" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*\.pdf$ ]]
+# Input sanitization - prevent path traversal and ensure valid filename
+# No consecutive dots, no starting with dot, alphanumeric start
+[[ "$filename" =~ ^[a-zA-Z0-9]([a-zA-Z0-9_-]|\.(?!\.))*\.pdf$ ]] && \
+[[ ! "$filename" =~ \.\. ]]
 ```
 
 ### Secure Execution
@@ -221,20 +223,34 @@ jobs:
 ### Application Monitoring
 **Custom Logging Framework**
 ```bash
-# Define log file location with secure fallback
+# Define log file location with secure fallback and explicit error handling
 # Prioritizes user home directory, falls back to a secure temp location
 if [ -n "$HOME" ]; then
     LOG_DIR="$HOME/.config/compresskit"
-    mkdir -p "$LOG_DIR" 2>/dev/null
-elif [ -w "/var/log" ]; then
+    if mkdir -p "$LOG_DIR" 2>/dev/null && [ -w "$LOG_DIR" ]; then
+        chmod 700 "$LOG_DIR"
+    else
+        LOG_DIR=""
+    fi
+fi
+
+# Try /var/log if HOME method failed
+if [ -z "$LOG_DIR" ] && [ -w "/var/log" ]; then
     LOG_DIR="/var/log/compresskit"
-    mkdir -p "$LOG_DIR" 2>/dev/null
-else
-    # Create user-specific temp directory with restricted permissions
-    # Use UID for security instead of USER variable
+    if ! mkdir -p "$LOG_DIR" 2>/dev/null || ! [ -w "$LOG_DIR" ]; then
+        LOG_DIR=""
+    fi
+fi
+
+# Final fallback: user-specific temp with secure permissions
+if [ -z "$LOG_DIR" ]; then
     USER_ID=$(id -u)
     LOG_DIR="${TMPDIR:-/tmp}/compresskit-${USER_ID}"
-    mkdir -p "$LOG_DIR" && chmod 700 "$LOG_DIR"
+    # Use install for atomic creation with correct permissions
+    install -d -m 700 "$LOG_DIR" 2>/dev/null || {
+        echo "WARNING: Cannot create secure log directory" >&2
+        LOG_DIR="/dev/null"  # Last resort: discard logs
+    }
 fi
 
 LOG_FILE="${LOG_DIR}/compresskit.log"
