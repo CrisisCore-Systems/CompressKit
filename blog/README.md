@@ -148,6 +148,31 @@ Complete testing approach for shell scripts. Covers:
 
 ---
 
+### 7. [Mastering PDF Optimization: A Technical Deep Dive](07-pdf-optimization-deep-dive.md)
+
+**Topics:** PDF Optimization, Compression Techniques, File Size Analysis, Best Practices
+
+A comprehensive technical exploration of PDF optimization. Covers:
+- The anatomy of a PDF and what makes files large
+- Compression techniques explained (JPEG, downsampling, font subsetting)
+- Quality vs. size trade-offs across the spectrum
+- Document type strategies (text-heavy, photos, mixed content, scans)
+- Real-world optimization workflows and scenarios
+- Advanced techniques (pipelines, selective compression, color management)
+- Measuring success with quantitative and qualitative metrics
+
+**Target Audience:** Developers, power users, system administrators, anyone working with PDFs regularly
+
+**Key Takeaways:**
+- Images are typically 60-85% of PDF file size
+- Different document types require different optimization strategies
+- Quality levels should match intended use (screen, print, archive)
+- Testing and verification are essential parts of the workflow
+- Combining tools in pipelines can achieve optimal results
+- CompressKit simplifies complex optimization with intelligent defaults
+
+---
+
 ## About These Posts
 
 These blog posts are based on the actual implementation of CompressKit, an open-source PDF compression toolkit. All code examples are production-ready and battle-tested. The patterns and practices described can be applied to any shell script project, regardless of size or complexity.
@@ -170,6 +195,7 @@ We recommend reading the posts in order:
 4. **Learn Error Handling** to build resilient applications
 5. **Explore Terminal UI** to create engaging user experiences
 6. **Master Testing** to ensure quality and catch regressions
+7. **Deep Dive into PDF Optimization** to master compression techniques and strategies
 
 However, each post stands alone and can be read independently based on your interests.
 

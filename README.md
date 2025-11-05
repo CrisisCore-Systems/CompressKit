@@ -211,6 +211,28 @@ Note: Tests require ImageMagick and other dependencies to be installed.
 
 For additional help, see [docs/SECURITY_GUIDE.md](docs/SECURITY_GUIDE.md) or open an issue on GitHub.
 
+## Documentation and Guides
+
+### Comprehensive Guides
+
+**[PDF Optimization Guide](docs/PDF_OPTIMIZATION_GUIDE.md)** - Master PDF compression techniques
+- Understanding PDF structure and file size components
+- Compression algorithms and quality trade-offs
+- Best practices for different document types
+- Common optimization scenarios and solutions
+
+**[CLI Tools Comparison](docs/CLI_TOOLS_COMPARISON.md)** - Compare PDF compression tools
+- Feature matrix comparing CompressKit, GhostScript, QPDF, and more
+- Performance benchmarks and analysis
+- Use case recommendations
+- Migration guides from other tools
+
+### Technical Documentation
+
+- [Architecture Guide](docs/ARCHITECTURE.md) - System design and module overview
+- [Security Guide](docs/SECURITY_GUIDE.md) - Security implementation details
+- [Main Documentation](docs/README.md) - Complete documentation hub
+
 ## Blog Posts
 
 Check out our technical blog posts about CompressKit:
@@ -221,6 +243,7 @@ Check out our technical blog posts about CompressKit:
 - [Error Handling and Recovery Patterns in Bash](blog/04-error-handling-patterns.md)
 - [Building Rich Terminal UIs with Bash](blog/05-terminal-ui-design.md)
 - [Testing Strategies for Shell Scripts](blog/06-testing-strategies.md)
+- [Mastering PDF Optimization: A Technical Deep Dive](blog/07-pdf-optimization-deep-dive.md)
 
 See the [blog directory](blog/README.md) for all articles and more information.
 
