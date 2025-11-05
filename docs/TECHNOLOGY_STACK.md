@@ -76,8 +76,14 @@
 
 **Security Framework**
 ```bash
-# Path validation
-realpath --canonicalize-existing "$input_file"
+# Path validation (portable across Linux/macOS)
+# Use realpath if available, fallback to readlink
+if command -v realpath >/dev/null 2>&1; then
+    canonical_path=$(realpath "$input_file" 2>/dev/null)
+else
+    canonical_path=$(readlink -f "$input_file" 2>/dev/null)
+fi
+
 # Input sanitization
 [[ "$filename" =~ ^[a-zA-Z0-9._-]+\.pdf$ ]]
 ```
@@ -208,10 +214,20 @@ jobs:
 ### Application Monitoring
 **Custom Logging Framework**
 ```bash
-# Define log file location (typically set in initialization)
-# Falls back to /tmp if HOME or .config directory is unavailable
-LOG_DIR="${HOME:-/tmp}/.config/compresskit"
-mkdir -p "$LOG_DIR" 2>/dev/null || LOG_DIR="/tmp"
+# Define log file location with secure fallback
+# Prioritizes user home directory, falls back to a secure temp location
+if [ -n "$HOME" ]; then
+    LOG_DIR="$HOME/.config/compresskit"
+    mkdir -p "$LOG_DIR" 2>/dev/null
+elif [ -w "/var/log" ]; then
+    LOG_DIR="/var/log/compresskit"
+    mkdir -p "$LOG_DIR" 2>/dev/null
+else
+    # Create user-specific temp directory with restricted permissions
+    LOG_DIR="${TMPDIR:-/tmp}/compresskit-$USER"
+    mkdir -p "$LOG_DIR" && chmod 700 "$LOG_DIR"
+fi
+
 LOG_FILE="${LOG_DIR}/compresskit.log"
 
 log_info() {
