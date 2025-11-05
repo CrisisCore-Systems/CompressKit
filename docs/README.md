@@ -15,6 +15,7 @@
     - [Premium Features](#premium-features)
 - [Architecture](#architecture)
 - [Example Use Cases](#example-use-cases)
+- [Guides and Resources](#guides-and-resources)
 - [Troubleshooting](#troubleshooting)
   - [Common Issues](#common-issues)
 - [Contributing](#contributing)
@@ -160,6 +161,47 @@ bash compresskit document.pdf medium
 
 ---
 
+## Guides and Resources
+
+### Comprehensive Guides
+
+**[PDF Optimization Guide](PDF_OPTIMIZATION_GUIDE.md)**  
+Master the art of PDF compression with this comprehensive guide covering:
+- Understanding PDF structure and components
+- Compression techniques and algorithms
+- Quality vs file size trade-offs
+- Optimization strategies for different document types
+- Best practices and common scenarios
+- Advanced techniques and troubleshooting
+
+**[CLI Tools Comparison](CLI_TOOLS_COMPARISON.md)**  
+Compare CompressKit with other PDF compression tools:
+- Feature comparison matrix
+- Tool-by-tool analysis (GhostScript, QPDF, PDFtk, etc.)
+- Performance benchmarks
+- Use case recommendations
+- Migration guides
+- Cost analysis
+
+### Technical Documentation
+
+- **[Architecture Guide](ARCHITECTURE.md)** - Detailed system architecture
+- **[Security Guide](SECURITY_GUIDE.md)** - Security implementation and best practices
+- **[Main README](../README.md)** - Project overview and quick start
+
+### Blog Posts
+
+Explore our technical blog posts in the [blog directory](../blog/README.md):
+- Introduction to CompressKit
+- Security in Shell Scripts
+- Building Modular CLI Apps
+- Error Handling Patterns
+- Terminal UI Design
+- Testing Strategies
+- PDF Optimization Deep Dive
+
+---
+
 ## Troubleshooting
 
 ### Common Issues
@@ -208,6 +250,8 @@ This project is licensed under the MIT License. See [LICENSE](../LICENSE) for de
 **Developed by [CrisisCore-Systems](https://github.com/CrisisCore-Systems)**
 
 For more information:
+- [PDF Optimization Guide](PDF_OPTIMIZATION_GUIDE.md)
+- [CLI Tools Comparison](CLI_TOOLS_COMPARISON.md)
 - [Security Guide](SECURITY_GUIDE.md)
 - [Architecture Documentation](ARCHITECTURE.md)
 - [Main README](../README.md)
