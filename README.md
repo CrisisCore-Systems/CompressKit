@@ -231,6 +231,7 @@ For additional help, see [docs/SECURITY_GUIDE.md](docs/SECURITY_GUIDE.md) or ope
 
 - [Architecture Guide](docs/ARCHITECTURE.md) - System design and module overview
 - [Security Guide](docs/SECURITY_GUIDE.md) - Security implementation details
+- [Technology Stack](docs/TECHNOLOGY_STACK.md) - Comprehensive technology stack recommendations and architecture decisions
 - [Project Timeline](docs/PROJECT_TIMELINE.md) - Comprehensive project timeline and milestone planning
 - [Main Documentation](docs/README.md) - Complete documentation hub
 
