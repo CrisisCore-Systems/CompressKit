@@ -180,9 +180,9 @@ jobs:
   [ "$status" -eq 0 ]
   # CompressKit typically outputs to <filename>_compressed.pdf
   [ -f "test_compressed.pdf" ]
-  # Verify size reduction
-  original_size=$(stat -f%z test.pdf)
-  compressed_size=$(stat -f%z test_compressed.pdf)
+  # Verify size reduction (Linux-compatible stat command)
+  original_size=$(stat -c%s test.pdf)
+  compressed_size=$(stat -c%s test_compressed.pdf)
   [ "$compressed_size" -lt "$original_size" ]
 }
 ```
