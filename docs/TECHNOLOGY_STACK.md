@@ -133,11 +133,17 @@ realpath --canonicalize-existing "$input_file"
 ### CI/CD Pipeline
 **GitHub Actions**
 ```yaml
-- name: Test on multiple platforms
-  strategy:
-    matrix:
-      os: [ubuntu-latest, ubuntu-20.04]
-      shell: [bash, dash]
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-20.04]
+        shell: [bash, dash]
+    steps:
+      - name: Test on multiple platforms
+        run: |
+          ${{ matrix.shell }} run_tests.sh
 ```
 
 **Testing Environments**
@@ -172,7 +178,12 @@ realpath --canonicalize-existing "$input_file"
 @test "compression reduces file size" {
   run ./compresskit test.pdf medium
   [ "$status" -eq 0 ]
+  # CompressKit typically outputs to <filename>_compressed.pdf
   [ -f "test_compressed.pdf" ]
+  # Verify size reduction
+  original_size=$(stat -f%z test.pdf)
+  compressed_size=$(stat -f%z test_compressed.pdf)
+  [ "$compressed_size" -lt "$original_size" ]
 }
 ```
 
@@ -196,6 +207,9 @@ realpath --canonicalize-existing "$input_file"
 ### Application Monitoring
 **Custom Logging Framework**
 ```bash
+# Define log file location (typically set in initialization)
+LOG_FILE="${HOME}/.config/compresskit/compresskit.log"
+
 log_info() {
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] INFO: $1" >> "$LOG_FILE"
 }
